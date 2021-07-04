@@ -1,0 +1,1 @@
+This directory contains worked examples of using `chem-eng-solver`'s modules to solve common ChemE problems.

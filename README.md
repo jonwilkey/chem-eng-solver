@@ -6,11 +6,10 @@ For example, suppose that you have an incompressible fluid in a tank at point 1 
 What is the velocity of the fluid at point 2?
 This type of question could be answered using the [Bernoulli principle](https://en.wikipedia.org/wiki/Bernoulli%27s_principle):
 
-$$
-\frac{1}{2} \rho v_1^2 + \rho g h_1 + p_1 = \frac{1}{2} \rho v_2^2 + \rho g h_2 + p_2
-$$
+<img src="https://render.githubusercontent.com/render/math?math=%5Cfrac%7B1%7D%7B2%7D%20%5Crho%20v_1%5E2%20%2B%20%5Crho%20g%20h_1%20%2B%20p_1%20%3D%20%5Cfrac%7B1%7D%7B2%7D%20%5Crho%20v_2%5E2%20%2B%20%5Crho%20g%20h_2%20%2B%20p_2">
 
-where $$rho$$ is the density of the fluid with velocity $$v_i$$, $$h_i$$ is the height, $$p_i$$ the pressure, and $$i$$ the reference points 1 and 2.
+
+where *rho* is the density of the fluid with velocity *v*, *h* is the height, *p* the pressure, and *i* the reference points 1 and 2.
 If the problem were being solved analytically, you would cancel out terms ($$p_1 = p_2$$ so that drops out, $$v_1 = 0$$, etc.) and rearrange to solve for the unknown variable ($$v_2$$) and perform any required units conversions.
 However thinking about this more problem more generically, the key requirements to solve these types of problems are:
 

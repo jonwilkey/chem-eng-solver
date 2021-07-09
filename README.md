@@ -10,11 +10,11 @@ This type of question could be answered using the [Bernoulli principle](https://
 
 
 where *rho* is the density of the fluid with velocity *v*, *h* is the height, *p* the pressure, and *i* the reference points 1 and 2.
-If the problem were being solved analytically, you would cancel out terms ($$p_1 = p_2$$ so that drops out, $$v_1 = 0$$, etc.) and rearrange to solve for the unknown variable ($$v_2$$) and perform any required units conversions.
+If the problem were being solved analytically, you would cancel out terms, rearrange to solve for the unknown variable, and perform any required units conversions.
 However thinking about this more problem more generically, the key requirements to solve these types of problems are:
 
 * Flexibily defining input arguments and underlying equations so that they can easily be reused for whatever the specific problem statement requires.
-* Selecting/applying an appropriate numerical method to solve 1 or more nonlinear equations / ODEs.
+* Selecting / applying an appropriate numerical method to solve 1 or more nonlinear equations / ODEs.
 * Conveniently automated unit conversions to tranforms inputs into standard SI units for calculations as well as output results in the required units.
 
 The goal of this package is to provide methods for accomplishing each of these tasks.

@@ -20,8 +20,8 @@ def test_bernoulli():
     Confirms that Bernoulli equation solver works as intended
     """
     fl = Fluids(INITIAL, FINAL, units_out="m/s")
-    assert fl.bernoulli() == "v = -10.0 m/s or 10.0 m/s"
+    assert fl.bernoulli() == "v = -10.97 m/s or 10.97 m/s"
     assert fl.solutions == [
-        u.unyt_quantity(-10.0, "m/s"),
-        u.unyt_quantity(10.0, "m/s"),
+        u.unyt_quantity(-10.97, "m/s"),
+        u.unyt_quantity(10.97, "m/s"),
     ]

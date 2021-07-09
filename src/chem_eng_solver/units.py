@@ -11,17 +11,23 @@ class Patterns:
     Define regular expressions used for parsing input_strings here
     """
 
-    initial = re.compile(r"^([-0-9\.]+)\s+([a-zA-Z)^/*0-9\s-]+)")
+    initial = re.compile(r"^([-0-9\.eE]+)\s+([a-zA-Z)^/*0-9\s-]+)")
     base_units = re.compile(r"([a-zA-Z]+)")
     operators = r"(^[\*/]?{unit}\^?(-?\d+)?)"
+    sigfigs = re.compile(r"[-0]*([0-9]*)?\.?([0-9]*)?[eE]?[0-9-]*")
+
+    @staticmethod
+    def sigfigs_repl(x: re.Match) -> str:
+        left, right = x.groups()
+        left = left.rstrip("0") if right == "" else left
+        return left + right if left != "0" else right
 
 
 class Units:
     def __init__(self, max_sigfigs: int = MAX_SIGFIGS) -> None:
         self.sigfigs = max_sigfigs
 
-    @staticmethod
-    def _initial_parser(input_str: str) -> Tuple[float, str]:
+    def _initial_parser(self, input_str: str) -> Tuple[float, str]:
         """
         Parses input into numeric value string and units string.
 
@@ -32,7 +38,7 @@ class Units:
             Exception: If input string doesn't match expected pattern
 
         Returns:
-            Tuple[float, str]: Value and units of parsed input string
+            Tuple[str, str]: Value and units of parsed input string
         """
         found = Patterns.initial.findall(input_str)
         if not found:
@@ -44,6 +50,7 @@ class Units:
                 "  to indicate exponentiation."
             )
         value, units = found[0]
+        self.count_sigfigs(value)
         return float(value), units
 
     @staticmethod
@@ -86,23 +93,17 @@ class Units:
             units = units.replace(base_str, "", 1)
         return final_units
 
-    def count_sigfigs(self, value: float) -> None:
+    def count_sigfigs(self, value: str) -> None:
         """
         Count number of significant figures in input value and track what the
         minimum number of sigfigs is of the units that this instance of
         :cls:`Units` has encountered thus far.
 
         Args:
-            value (float): Input vale
+            value (str): Input vale
         """
-        float_in_sci_notation = "{:2e}".format(value)
-        sigfigs = len(
-            float_in_sci_notation.split("e")[0]
-            .rstrip("0")
-            .replace(".", "")
-            .replace("-", "")
-        )
-        self.sigfigs = min(self.sigfigs, sigfigs)
+        sigfig_count = len(Patterns.sigfigs.sub(Patterns.sigfigs_repl, value))
+        self.sigfigs = min(self.sigfigs, sigfig_count)
 
     def unit_converter(
         self, input_str: str, include_units: bool = False
@@ -123,7 +124,6 @@ class Units:
                 equivalent value in Kelvin)
         """
         value, units_str = self._initial_parser(input_str)
-        self.count_sigfigs(value)
         units = self._units_parser(units_str)
         quantity = value * units
         quantity.convert_to_mks()

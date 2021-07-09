@@ -29,18 +29,13 @@ See the `examples` directory for worked problems.
 
 # Development
 
-Clone this repo using git, then activate a virtual environment, for example with [venv](https://docs.python.org/3/library/venv.html):
+Clone this repo using git, then activate a virtual environment, for example with [pipenv](https://pipenv.pypa.io/en/latest/):
 
 ```bash
-$ python3 -m venv /path/to/desired/venv/chem-eng-solver/
-$ source /path/to/desired/venv/chem-eng-solver/bin/activate
+# --pre required because black is pre-release: https://github.com/psf/black/issues/822
+$ pipenv install --pre
 ```
 
-To install all of the dependencies necessary for development, run:
-
-```bash
-pip install -e /path/to/desired/venv/chem-eng-solver
-```
 # Documentation
 
 WIP

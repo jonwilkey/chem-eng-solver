@@ -1,6 +1,24 @@
+[tool.poetry]
+name = "chem-eng-solver"
+version = "0.0.1"
+description = "Tools for solving common chemical engineering problems"
+authors = ["Jon Wilkey <jon.wilkey@gmail.com>"]
+license = "MIT License"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.10"
+scipy = "^1.7.1"
+numpy = "^1.21.2"
+unyt = "^2.8.0"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.9.2"
+pytest = "^6.2.4"
+pytest-cov = "^2.12.1"
+mypy = "^0.910"
+black = "^21.7b0"
+ipython = "^7.26.0"
+
 [build-system]
-requires = [
-    "setuptools>=42",
-    "wheel"
-]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

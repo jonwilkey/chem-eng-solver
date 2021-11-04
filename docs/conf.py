@@ -17,6 +17,9 @@ documentation: https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Project information -----------------------------------------------------
 
+from typing import List
+
+
 project = "chem-eng-solver"
 copyright = "2021, Jon Wilkey"
 author = "Jon Wilkey"
@@ -27,7 +30,7 @@ author = "Jon Wilkey"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions: List[str] = []
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

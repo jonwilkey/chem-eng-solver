@@ -1,3 +1,5 @@
+"""This module defines common methods for tracking units and unit conversions."""
+
 import re
 from typing import Tuple, Union
 
@@ -7,9 +9,7 @@ MAX_SIGFIGS = 6
 
 
 class Patterns:
-    """
-    Define regular expressions used for parsing input_strings here
-    """
+    """Define regular expressions used for parsing strings here."""
 
     initial = re.compile(r"^([-0-9\.eE]+)\s+([a-zA-Z)^/*0-9\s-]+)")
     base_units = re.compile(r"([a-zA-Z]+)")
@@ -18,27 +18,42 @@ class Patterns:
 
     @staticmethod
     def sigfigs_repl(x: re.Match) -> str:
+        """Removes trailing-zeros (10000 -> 1) and leading zeros (000.001 -> .001).
+
+        Args:
+            x (re.Match): Match object containing left/right-side of decimal point.
+
+        Returns:
+            str: String with trailing/leading zeros removed.
+        """
         left, right = x.groups()
         left = left.rstrip("0") if right == "" else left
         return left + right if left != "0" else right
 
 
 class Units:
+    """Class for parsing and converting units from input strings."""
+
     def __init__(self, max_sigfigs: int = MAX_SIGFIGS) -> None:
+        """Initialize class.
+
+        Args:
+            max_sigfigs (int, optional): How many sig figs to report (at most). Defaults
+                to MAX_SIGFIGS.
+        """
         self.sigfigs = max_sigfigs
 
     def _initial_parser(self, input_str: str) -> Tuple[float, str]:
-        """
-        Parses input into numeric value string and units string.
+        """Parses input into numeric value string and units string.
 
         Args:
-            input_str (str): Input string
+            input_str (str): Input string.
 
         Raises:
-            Exception: If input string doesn't match expected pattern
+            Exception: If input string doesn't match expected pattern.
 
         Returns:
-            Tuple[str, str]: Value and units of parsed input string
+            Tuple[str, str]: Value and units of parsed input string.
         """
         found = Patterns.initial.findall(input_str)
         if not found:
@@ -55,19 +70,18 @@ class Units:
 
     @staticmethod
     def _units_parser(units: str) -> u.unyt_quantity:
-        """
-        Parses given units string, returning equivalent unyt_quantity object.
+        """Parses given units string, returning equivalent unyt_quantity object.
 
         Args:
-            units (str): Units string, e.g. "kg/m/s**2"
+            units (str): Units string, e.g. "kg/m/s**2".
 
         Raises:
-            Exception: If unknown pattern is encountered that prevents function
-                from building final_unit object (expects just multiplication,
-                division, and exponentiation without paranthesis or brackets).
+            Exception: If unknown pattern is encountered that prevents function from
+                building final_unit object (expects just multiplication, division, and
+                exponentiation without paranthesis or brackets).
 
         Returns:
-            u.unyt_quantity: unyt_quantity object equivalent to the input string
+            u.unyt_quantity: unyt_quantity object equivalent to the input string.
         """
         units = units.replace(" ", "").replace("**", "^")
         final_units = 1.0
@@ -94,13 +108,13 @@ class Units:
         return final_units
 
     def count_sigfigs(self, value: str) -> None:
-        """
-        Count number of significant figures in input value and track what the
-        minimum number of sigfigs is of the units that this instance of
+        """Count number of significant figures in input value.
+
+        Tracks what the minimum number of sigfigs is of the units that this instance of
         :cls:`Units` has encountered thus far.
 
         Args:
-            value (str): Input vale
+            value (str): Input vale.
         """
         sigfig_count = len(Patterns.sigfigs.sub(Patterns.sigfigs_repl, value))
         self.sigfigs = min(self.sigfigs, sigfig_count)
@@ -108,16 +122,16 @@ class Units:
     def unit_converter(
         self, input_str: str, include_units: bool = False
     ) -> Union[float, u.unyt_quantity]:
-        """
-        Parse input value plus string and return input converted into equivalent
-        SI units. This function assumes that inputs match the following pattern:
+        """Parse input value plus string and convert into equivalent SI units.
+
+        This function assumes that inputs match the following pattern:
 
         [0-9]+ [a-z]+([*/])?
 
         Args:
             input_str (str): Input value plus units, e.g. "212 degF"
-            include_units (bool, optional): Whether or not to include units in
-                the return object. Defaults to False.
+            include_units (bool, optional): Whether or not to include units in the
+                return object. Defaults to False.
 
         Returns:
             float: Value converted to SI units, e.g. "212 degF" --> 373.15 (the

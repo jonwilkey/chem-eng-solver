@@ -1,21 +1,27 @@
+"""Tests for base_solver.py module."""
+
+import pytest
 import unyt as u
-from chem_eng_solver.base_solver import Solver
+
+from chem_eng_solver.base_solver import EqRegistry, Solver
 from chem_eng_solver.fluids import FluidsEq
 
 
 def test__add_units():
-    """
-    Confirm that method that adds units to numerical answers based on lookup of
-    symbol for unknown term works as expected
+    """Tests :meth:`_add_units`.
+
+    Confirms that method adds units to numerical answers based on lookup of symbol for
+    unknown term as expected.
     """
     solver = Solver(units_out="psi")
     solver.unknown = "P"
-    assert solver._add_units(101325, FluidsEq) == 14.6959
+    assert solver._add_units(101325, FluidsEq.units) == 14.6959
 
 
 def test__convert_units():
-    """
-    Confirms that method converts units as expected
+    """Test for :meth:`_convert_units`.
+
+    Confirms that method converts units as expected.
     """
     solver = Solver()
 
@@ -29,8 +35,9 @@ def test__convert_units():
 
 
 def test__round_to_sigfigs():
-    """
-    Confirms that rounding method returns expected number of sigfigs
+    """Test for :meth:`_round_to_sigfigs`.
+
+    Confirms that rounding method returns expected number of sigfigs.
     """
     solver = Solver()
     assert solver._round_to_sigfigs(1.23456789 * u.ft) == 1.23457
@@ -38,12 +45,34 @@ def test__round_to_sigfigs():
 
 
 def test_find_bounds():
-    """
+    """Test for :meth:`find_bounds`.
+
     Confirm that method of finding upper/lower bounds around which an arbitrary
-    function crosses zero works as intended
+    function crosses zero works as intended.
     """
     solver = Solver()
 
-    # Crosses 0 at x = 500, expected bracketing is single crossing (100, 1000)
-    func = lambda x: x - 500
-    assert solver.find_bounds(func) == [(100, 1000)]
+    def simple_function(x: float) -> float:
+        """Function that has a root at x = 500.
+
+        Expected bracketing when passed to :meth:`find_bounds` is [100, 1000]
+
+        Args:
+            x (float): Independent variable
+
+        Returns:
+            float: y-value according to equation y = x - 500.
+        """
+        return x - 500
+
+    assert solver.find_bounds(simple_function) == [(100, 1000)]
+
+
+def test_eq_registry_raises_when_abstractmethod_remains():
+    """Confirms that :cls:`EqRegistry` can't be instantiated with abstractmethod."""
+
+    class MockClass(EqRegistry):
+        pass
+
+    with pytest.raises(TypeError, match="Can't .* with abstract methods units"):
+        MockClass()

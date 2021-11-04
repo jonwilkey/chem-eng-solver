@@ -1,5 +1,6 @@
+"""Tests for stoichiometry.py module."""
+
 import pytest
-import numpy as np
 
 from chem_eng_solver.stoichiometry import Stoichiometry
 
@@ -50,15 +51,14 @@ TEST_CASES = [
 
 
 def test_stoichiometry_raises_when_no_directional_character_given():
-    """
-    Confirms that Exception is raised when input_str is missing a ">" character
-    """
+    """Confirms that Exception is raised when input_str is missing a ">" character."""
     with pytest.raises(Exception, match=".*does not contain a '>' character"):
         Stoichiometry("CH4 + O2")
 
 
 def test_stoichiometry_raises_when_input_eq_is_invalid():
-    """
+    """Confirm that :cls:`Stoichiometry` raises when input equation is invalid.
+
     Not every input_eq value has a valid solution (e.g. user input could be
     wrong). Confirm that when this occurs that appropriate error is raised when
     attepting to find balanced equation.
@@ -69,19 +69,13 @@ def test_stoichiometry_raises_when_input_eq_is_invalid():
 
 
 def test_stoichiometry_raises_when_elements_not_present_on_both_sides_of_eq():
-    """
-    Confirm that error is thrown if input equation is invalid because any
-    element is missing from one side of chemical equation.
-    """
+    """Confirm that method raises when element is missing from one side of equation."""
     with pytest.raises(Exception, match=".*is not present on both sides.*"):
         Stoichiometry("CaF2 --> Ca")
 
 
 def test_stoichiometry():
-    """
-    Confirms that Stoichiometry class works as intended for every defined test
-    case
-    """
+    """Confirms that :cls:`Stoichiometry` works as intended for all test cases."""
     for case in TEST_CASES:
         st = Stoichiometry(case["input_eq"])
         for name, value in case.items():

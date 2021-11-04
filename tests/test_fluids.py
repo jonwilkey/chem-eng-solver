@@ -1,4 +1,7 @@
+"""Tests for fluids.py module."""
+
 import unyt as u
+
 from chem_eng_solver.fluids import Fluids
 
 INITIAL = {
@@ -16,9 +19,7 @@ FINAL = {
 
 
 def test_bernoulli():
-    """
-    Confirms that Bernoulli equation solver works as intended
-    """
+    """Confirms that Bernoulli equation solver works as intended."""
     fl = Fluids(INITIAL, FINAL, units_out="m/s")
     assert fl.bernoulli() == "v = -10.97 m/s or 10.97 m/s"
     assert fl.solutions == [

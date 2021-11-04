@@ -1,5 +1,8 @@
+"""Tests for units.py module."""
+
 import pytest
 import unyt as u
+
 from chem_eng_solver.units import Units
 
 # Define test cases here, pattern is:
@@ -18,8 +21,8 @@ CASES = [
     ("123 kg*m^-3", (123.0, "kg*m^-3"), 1 * u.kg / u.m ** 3, 123.0),
     ("-123 kg/m^3*m/m", (-123.0, "kg/m^3*m/m"), 1 * u.kg / u.m ** 3, -123.0),
     ("123 /m^3", (123.0, "/m^3"), 1 / u.m ** 3, 123.0),
-    ("123E15 kg/m**3", (123e15, "kg/m**3"), 1 * u.kg/ u.m ** 3, 123e15),
-    ("123e15 kg/m**3", (123e15, "kg/m**3"), 1 * u.kg/ u.m ** 3, 123e15),
+    ("123E15 kg/m**3", (123e15, "kg/m**3"), 1 * u.kg / u.m ** 3, 123e15),
+    ("123e15 kg/m**3", (123e15, "kg/m**3"), 1 * u.kg / u.m ** 3, 123e15),
 ]
 
 # Define examples of bad input strings that should raise exceptions listed
@@ -33,9 +36,7 @@ BAD_CASES_UNITS_PARSER = [
 
 
 def test__initial_parser():
-    """
-    Confirms that _initial_parser returns expected output for all test cases
-    """
+    """Confirms that _initial_parser returns expected output for all test cases."""
     units = Units()
     for input_str, expected_output, _, _ in CASES:
         value, units_str = units._initial_parser(input_str)
@@ -45,9 +46,7 @@ def test__initial_parser():
 
 
 def test__initial_parser_raises():
-    """
-    Confirms that _initial_parser raises exception on bad input string
-    """
+    """Confirms that _initial_parser raises exception on bad input string."""
     units = Units()
     for input_str, exception_msg in BAD_CASES_INITIAL_PARSER:
         with pytest.raises(Exception, match=exception_msg):
@@ -55,9 +54,7 @@ def test__initial_parser_raises():
 
 
 def test__units_parser():
-    """
-    Confirms that _units_parser returns expected output for all test cases
-    """
+    """Confirms that _units_parser returns expected output for all test cases."""
     for _, _initial_parser_output, expected_output, _ in CASES:
         _, units_str = _initial_parser_output
         units = Units._units_parser(units_str)
@@ -65,18 +62,14 @@ def test__units_parser():
 
 
 def test__units_parser_raises():
-    """
-    Confirms that _units_parser raises exception on bad input string
-    """
+    """Confirms that _units_parser raises exception on bad input string."""
     for input_str, exception_msg in BAD_CASES_UNITS_PARSER:
         with pytest.raises(Exception, match=exception_msg):
             Units._units_parser(input_str)
 
 
 def test_count_sigfigs():
-    """
-    Confirms that method for counting sigfigs works as intended
-    """
+    """Confirms that method for counting sigfigs works as intended."""
     # Confirm that by default sigfigs starts out as max_sigfigs argument
     units = Units(max_sigfigs=12)
     assert units.sigfigs == 12
@@ -86,7 +79,7 @@ def test_count_sigfigs():
     assert units.sigfigs == 7
 
     # Confirms that sigfigs remains at lowest value that is given to method
-    units.count_sigfigs(str(1.0/3.0))
+    units.count_sigfigs(str(1.0 / 3.0))
     assert units.sigfigs == 7
 
     # Even when all zeros counts sig figs correctly
@@ -107,9 +100,7 @@ def test_count_sigfigs():
 
 
 def test_unit_converter():
-    """
-    Confirms that unit_converter returns expected output for all test cases
-    """
+    """Confirms that unit_converter returns expected output for all test cases."""
     units = Units()
     for input_str, _, _, expected_output in CASES:
         converted_value = units.unit_converter(input_str)

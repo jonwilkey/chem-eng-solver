@@ -21,7 +21,7 @@ The goal of this package is to provide methods for accomplishing each of these t
 
 # Installation
 
-Not released yet :) however the goal is to publish this package on [PyPI](https://pypi.org/) so that it can be installed via `pip`.
+Not released yet :) however the goal is to publish this package on [PyPI](https://pypi.org/).
 
 # Examples
 
@@ -29,12 +29,11 @@ See the `examples` directory for worked problems.
 
 # Development
 
-Clone this repo using git, then activate a virtual environment, for example with [pipenv](https://pipenv.pypa.io/en/latest/):
+To setup this package for development, do the following:
 
-```bash
-# --pre required because black is pre-release: https://github.com/psf/black/issues/822
-$ pipenv install --pre
-```
+1. Clone this repo to your local machine `git clone git@github.com:jonwilkey/chem-eng-solver.git`.
+2. Install poetry (see install instructions [here](https://github.com/python-poetry/poetry)).
+3. Run `poetry install`.
 
 # Documentation
 

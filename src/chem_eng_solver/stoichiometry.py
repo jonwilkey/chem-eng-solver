@@ -1,3 +1,5 @@
+"""Module for solving stoichiometry problems."""
+
 import re
 from typing import Dict, List
 
@@ -13,20 +15,16 @@ SOLUTION_TOLERANCE = 1e-16
 
 
 class Stoichiometry:
-    """
-    Provides methods for balancing chemical equations.
-    """
+    """Provides methods for balancing chemical equations."""
 
     def __init__(self, input_eq: str) -> None:
-        """
-        Parse input equation to find stoichiometrically balanced version and
-        print result.
+        """Parse input equation to find stoichiometrically balanced version.
 
         Args:
-            input_eq (str): Input equation, e.g. "CH4 + O2 --> CO2 + H2O". Input
-                does not need to be balanced (in fact input coefficients are
-                ignored). Must contain a ">" character, which is used to
-                identify reactants vs. products.
+            input_eq (str): Input equation, e.g. "CH4 + O2 --> CO2 + H2O". Input does
+                not need to be balanced (in fact input coefficients are ignored). Must
+                contain a ">" character, which is used to identify reactants vs.
+                products.
 
         Raises:
             Exception: if input_str does not contain a ">" character.
@@ -69,17 +67,15 @@ class Stoichiometry:
         print(self.result)
 
     def _get_element_coeff_matrix(self, eq_side: List[str]) -> None:
-        """
-        Method for parsing components of the input chemical equation to find how
-        many of each unique element type are present in each reactant/product
-        molecule, updating `self.element_balance` accordingly.
+        """Parses input equation to find each element and their count in all molecules.
+
+        Results are used to update `self.element_balance` accordingly.
 
         Args:
-            eq_side (List[str]): Molecules on reactant/product side of chemical
-                balance. Assumed that this method is called by :meth:`__init__`
-                twice in reactant, product order, and that
-                :attr:`self._eq_side_is_product` tracks which side is being
-                processed.
+            eq_side (List[str]): Molecules on reactant/product side of chemical balance.
+                Assumed that this method is called by :meth:`__init__` twice in reactant
+                product order, and that :attr:`self._eq_side_is_product` tracks which
+                side is being processed.
         """
         for molecule in eq_side:
             composition = {k: v for k, v in REGEX["elements"].findall(molecule)}
@@ -95,13 +91,13 @@ class Stoichiometry:
         self._eq_side_is_product = not self._eq_side_is_product
 
     def _validate_elemental_balance(self) -> None:
-        """
-        Validates that every element found is present on both the reactant and
-        product side of :attr:`self.input_eq` by looking for positive and
-        negative values for each element in :attr:`self.element_balance`.
+        """Validates that every element found is present on both sides of equation.
+
+        Checks :attr:`self.input_eq` by looking for positive and negative values for
+        each element in :attr:`self.element_balance`.
 
         Raises:
-            Exception: If any element isn't present on both sides of equation
+            Exception: If any element isn't present on both sides of equation.
         """
         for element, values in self.element_balance.items():
             n_reactant, n_product = 0, 0
@@ -116,23 +112,18 @@ class Stoichiometry:
                     "sides of chemical equation!"
                 )
 
-    def balance_equation(
-        self, nth_decimal: int = ROUND_TO_NTH_DECIMAL
-    ) -> List[float]:
-        """
-        Determines coefficients for each molecule in balanced equation.
+    def balance_equation(self, nth_decimal: int = ROUND_TO_NTH_DECIMAL) -> List[float]:
+        """Determines coefficients for each molecule in balanced equation.
 
         Args:
-            nth_decimal (int, optional): Round coefficients to nth decimal.
-                Defaults to :param:`ROUND_TO_NTH_DECIMAL`.
+            nth_decimal (int, optional): Round coefficients to nth decimal. Defaults to
+                :param:`ROUND_TO_NTH_DECIMAL`.
 
         Returns:
-            List[float]: Coefficients for each molecule in balanced chemical
-                equation, rounded to ROUND_TO_NTH_DECIMAL.
+            List[float]: Coefficients for each molecule in balanced chemical equation,
+                rounded to ROUND_TO_NTH_DECIMAL.
         """
-        all_coeff = np.array(
-            [balance for balance in self.element_balance.values()]
-        )
+        all_coeff = np.array([balance for balance in self.element_balance.values()])
         n, _ = all_coeff.shape
         result = lsq_linear(
             all_coeff, np.zeros(n), bounds=(1, np.inf), tol=SOLUTION_TOLERANCE
@@ -149,27 +140,22 @@ class Stoichiometry:
         return x.round(nth_decimal).tolist()
 
     def _format_result(self, eq_side: List[str]) -> str:
-        """
-        Formats balanced coefficients for each molecule stored in
-        :attr:`self.balance` with molecules in given :param:`eq_side`.
+        """Formats balanced coefficients for each molecule.
 
         Args:
-            eq_side (List[str]): Molecules on given side of equation. Assumed
-                that this method is called by :meth:`__init__` twice in
-                reactant, product order, and that
-                :attr:`self._eq_side_is_product` tracks which side is being
+            eq_side (List[str]): Molecules on given side of equation. Assumed that this
+                method is called by :meth:`__init__` twice in reactant, product order,
+                and that :attr:`self._eq_side_is_product` tracks which side is being
                 processed.
 
         Returns:
-            str: Formatted string containing molecules on given side of equation
-                and their balanced coefficients.
+            str: Formatted string containing molecules on given side of equation and
+                their balanced coefficients.
         """
         coeff = self.balance
         if self._eq_side_is_product:
-            coeff = coeff[len(self.molecules["reactants"]) :]
+            coeff = coeff[len(self.molecules["reactants"]) :]  # noqa: E203
         self._eq_side_is_product = not self._eq_side_is_product
-        combined = map(
-            lambda coeff, molecule: f"{coeff} {molecule}", coeff, eq_side
-        )
+        combined = map(lambda coeff, molecule: f"{coeff} {molecule}", coeff, eq_side)
         full_str = " + ".join(combined)
         return full_str.replace("1.0 ", "")

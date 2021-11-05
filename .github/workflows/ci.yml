@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       #----------------------------------------------
-      #       check-out repo and set-up python
+      # check-out repo and set-up python
       #----------------------------------------------
       - name: Check out repository
         uses: actions/checkout@v2
@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: 3.7
       #----------------------------------------------
-      #  -----  install & configure poetry  -----
+      # install & configure poetry
       #----------------------------------------------
       - name: Install Poetry
         uses: snok/install-poetry@v1
@@ -26,7 +26,7 @@ jobs:
           installer-parallel: true
 
       #----------------------------------------------
-      #       load cached venv if cache exists
+      # load cached venv if cache exists
       #----------------------------------------------
       - name: Load cached venv
         id: cached-poetry-dependencies
@@ -46,13 +46,13 @@ jobs:
       - name: Install library
         run: poetry install --no-interaction
       #----------------------------------------------
-      #              run test suite
+      # run tests and linters
       #----------------------------------------------
       - name: Run tests
         run: |
           source .venv/bin/activate
           pytest
-          mypy .
-          flake8 --docstring-convention google --max-line-length 88
-          black . --check
-          isort . --check
+          mypy src/
+          flake8 src/ tests/ examples/ --docstring-convention google --max-line-length 88
+          black src/ tests/ examples/ --check
+          isort src/ tests/ examples/ --check

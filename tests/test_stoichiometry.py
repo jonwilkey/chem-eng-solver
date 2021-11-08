@@ -32,21 +32,34 @@ TEST_CASES = [
         "balance": [2.0, 1.0, 2.0],
         "result": "2.0 Na + Cl2 --> 2.0 NaCl",
     },
-    # TODO: Enable parsing of repeat elements such as this example with ethanol
-    # {
-    #     "input_eq": "CH3CH2OH + O2 --> CO2 + H2O",
-    #     "element_balance": {
-    #         "C": [2.0, 0.0, -1.0, 0.0],
-    #         "H": [6.0, 0.0, 0.0, -2.0],
-    #         "O": [0.0, 2.0, -2.0, -1.0],
-    #     },
-    #     "molecules": {
-    #         "reactants": ["CH3CH2OH", "O2"],
-    #         "products": ["CO2", "H2O"],
-    #     },
-    #     "balance": [2.0, 1.0, 2.0],
-    #     "result": "CH3CH2OH + 3.5 O2 --> 2.0 CO2 + 3.0 H2O",
-    # },
+    {
+        "input_eq": "CH3CH2OH + O2 --> CO2 + H2O",
+        "element_balance": {
+            "C": [2.0, 0.0, -1.0, 0.0],
+            "H": [6.0, 0.0, 0.0, -2.0],
+            "O": [1.0, 2.0, -2.0, -1.0],
+        },
+        "molecules": {
+            "reactants": ["CH3CH2OH", "O2"],
+            "products": ["CO2", "H2O"],
+        },
+        "balance": [1.0, 3.0, 2.0, 3.0],
+        "result": "CH3CH2OH + 3.0 O2 --> 2.0 CO2 + 3.0 H2O",
+    },
+    {
+        "input_eq": "CH3(C(H2))4OH + O2 --> CO2 + H2O",
+        "element_balance": {
+            "C": [5.0, 0.0, -1.0, 0.0],
+            "H": [12.0, 0.0, 0.0, -2.0],
+            "O": [1.0, 2.0, -2.0, -1.0],
+        },
+        "molecules": {
+            "reactants": ["CH3CH2CH2CH2CH2OH", "O2"],
+            "products": ["CO2", "H2O"],
+        },
+        "balance": [1.0, 7.5, 5.0, 6.0],
+        "result": "CH3CH2CH2CH2CH2OH + 7.5 O2 --> 5.0 CO2 + 6.0 H2O",
+    },
 ]
 
 

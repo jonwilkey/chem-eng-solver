@@ -9,6 +9,7 @@ from scipy.optimize import lsq_linear
 REGEX = {
     "molecules": re.compile("([A-Za-z0-9]+)"),
     "elements": re.compile("([A-Z][a-z]?)([0-9]*)"),
+    "groups": re.compile(r"\((.*)\)([0-9]*)"),
 }
 ROUND_TO_NTH_DECIMAL = 2
 SOLUTION_TOLERANCE = 1e-16
@@ -35,6 +36,7 @@ class Stoichiometry:
                 f"The input:\n\n{input_eq}\n\ndoes not contain a '>' character"
             )
         self.input_eq = input_eq
+        input_eq = self._unpack_input_eq_groups(input_eq)
 
         # This attribute is used to track which side of eq is being operated
         # on in :meth:`_get_element_coeff_matrix` and :meth:`_format_side`
@@ -66,6 +68,24 @@ class Stoichiometry:
         )
         print(self.result)
 
+    def _unpack_input_eq_groups(self, input_str: str) -> str:
+        """Unpacks groups of elements/molecules in :arg:`input_eq`.
+
+        For example, CH3(CH2)2OH would become CH3CH2CH2OH.
+
+        Args:
+            input_eq (str): Input string to search for groups to unpack.
+
+        Returns:
+            str: Unpacked version of input string.
+        """
+        groups = REGEX["groups"].findall(input_str)
+        for elements, count in groups:
+            elements = self._unpack_input_eq_groups(elements)
+            multiplier = 1 if count == "" else int(count)
+            input_str = REGEX["groups"].sub(elements * multiplier, input_str)
+        return input_str
+
     def _get_element_coeff_matrix(self, eq_side: List[str]) -> None:
         """Parses input equation to find each element and their count in all molecules.
 
@@ -78,15 +98,17 @@ class Stoichiometry:
                 side is being processed.
         """
         for molecule in eq_side:
-            composition = {k: v for k, v in REGEX["elements"].findall(molecule)}
-            for element in self.element_balance.keys():
-                count = composition.get(element)
-                if count is None:
-                    count = 0.0
+            composition: Dict[str, float] = {}
+            for k, v in REGEX["elements"].findall(molecule):
+                count = 1.0 if v == "" else float(v)
+                if composition.get(k):
+                    composition[k] += count
                 else:
-                    count = 1.0 if count == "" else float(count)
-                    if self._eq_side_is_product:
-                        count *= -1.0
+                    composition[k] = count
+            for element in self.element_balance.keys():
+                count = composition.get(element, 0.0)
+                if self._eq_side_is_product:
+                    count *= -1.0
                 self.element_balance[element].append(count)
         self._eq_side_is_product = not self._eq_side_is_product
 

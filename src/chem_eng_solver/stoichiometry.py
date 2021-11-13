@@ -139,11 +139,11 @@ class Stoichiometry:
 
         Args:
             nth_decimal (int, optional): Round coefficients to nth decimal. Defaults to
-                :param:`ROUND_TO_NTH_DECIMAL`.
+                :const:`ROUND_TO_NTH_DECIMAL`.
 
         Returns:
             List[float]: Coefficients for each molecule in balanced chemical equation,
-                rounded to ROUND_TO_NTH_DECIMAL.
+            rounded to :const:`ROUND_TO_NTH_DECIMAL`.
         """
         all_coeff = np.array([balance for balance in self.element_balance.values()])
         n, _ = all_coeff.shape
@@ -172,7 +172,7 @@ class Stoichiometry:
 
         Returns:
             str: Formatted string containing molecules on given side of equation and
-                their balanced coefficients.
+            their balanced coefficients.
         """
         coeff = self.balance
         if self._eq_side_is_product:

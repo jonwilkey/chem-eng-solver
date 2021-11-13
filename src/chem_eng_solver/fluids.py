@@ -12,31 +12,30 @@ G = float(u.physical_constants.standard_gravity.value)
 
 
 class FluidsEq(EqRegistry):
-    """Defines general form of fluid equations and their nomenclature / units.
-
-    Attributes:
-        bernoulli (str): The Bernoulli equation for an incompressible fluid.
-    """
+    """Defines general form of fluid equations and their nomenclature / units."""
 
     class units(SimpleNamespace):
-        """Nomenclature and units for all terms used in equations.
-
-        Attributes:
-            h (m): Height
-            G (m/s**2): Accelaration due to gravity
-            P (Pa): Pressure
-            rho (kg/m**3): Density
-            v (m/s): Velocity
-        """
+        """Nomenclature and units for all terms used in equations."""
 
         h = u.m
+        "Height"
+
         G = u.m / u.s ** 2
+        "Accelration of gravity"
+
         P = u.pascal
+        "Pressure"
+
         rho = u.kg / u.m ** 3
+        "Density"
+
         v = u.m / u.s
+        "velocity"
 
     # Define equations here
+
     bernoulli = "0.5 * {rho} * {v} ** 2 + {rho} * G * {h} + {P}"
+    "The Bernoulli equation for an incompressible fluid"
 
 
 class Fluids(Solver):
@@ -53,7 +52,7 @@ class Fluids(Solver):
         Args:
             initial (Dict[str, str]): Initial values for system (v, P, etc.).
             final (Dict[str, str]): Final values for system.
-            kwargs: Additional keyword arguments to :cls:`Solver` parent class.
+            kwargs: Additional keyword arguments to :class:`Solver` parent class.
         """
         super().__init__(**kwargs)
 

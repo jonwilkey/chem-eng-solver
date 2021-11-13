@@ -69,7 +69,7 @@ def test_find_bounds():
 
 
 def test_eq_registry_raises_when_abstractmethod_remains():
-    """Confirms that :cls:`EqRegistry` can't be instantiated with abstractmethod."""
+    """Confirms that :class:`EqRegistry` can't be instantiated with abstractmethod."""
 
     class MockClass(EqRegistry):
         pass

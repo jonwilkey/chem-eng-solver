@@ -26,7 +26,7 @@ class EqRegistry(ABC):
 
 
 class Solver:
-    """Class for finding solution to any unknown variable in :cls:`EqRegistry`."""
+    """Class for finding solution to any unknown variable in :class:`EqRegistry`."""
 
     def __init__(
         self,
@@ -48,7 +48,7 @@ class Solver:
     def _round_to_sigfigs(
         self, x: u.unyt_quantity, n: Optional[int] = None
     ) -> u.unyt_quantity:
-        """Rounds input value to sigfigs of :cls:`Fluids` input arguments.
+        """Rounds input value to sigfigs of :class:`Fluids` input arguments.
 
         Args:
             x (unyt_quantity): Input value to round to sigfigs.
@@ -66,8 +66,8 @@ class Solver:
     def _convert_units(self, parameter: str, value: str) -> Union[float, str]:
         """Convert input string to value of quantity in SI units.
 
-        If the input matches the `UNKNOWN` string definition, mark the parameter as
-        :attr:`self.unknown` (the quantity that will be solved for).
+        If the input matches the :const:`UNKNOWN` string definition, mark the parameter
+        as :attr:`self.unknown` (the quantity that will be solved for).
 
         Args:
             parameter (str): Name of parameter.
@@ -75,7 +75,7 @@ class Solver:
 
         Returns:
             Union[float, str]: Value of quantity in SI units or input string if value
-                matches `UNKNOWN` definition.
+            matches :const:`UNKNOWN` definition.
         """
         if value == UNKNOWN:
             self.unknown = parameter
@@ -96,7 +96,7 @@ class Solver:
 
         Returns:
             u.unyt_quantity: Solution with units applied (including conversion to
-                desired non-SI units if specified in :attr:`self.units_out`).
+            desired non-SI units if specified in :attr:`self.units_out`).
         """
         quantity = solution * getattr(eq_registry_units, self.unknown)
         quantity = quantity.to(self.units_out) if self.units_out else quantity
@@ -104,18 +104,19 @@ class Solver:
 
     @staticmethod
     def find_bounds(func: Callable) -> List[Tuple[float, float]]:
-        """Finds bounds where :arg:`func` has opposite sign.
+        """Finds bounds where :func:`func` has opposite sign.
 
-        Searches over range of values from [-10**`MAX_BOUNDS`, 10**`MAXBOUNDS`] to
-        support numerical methods that find roots using bracketing algorithms like
-        `scipy.optimize.brentq`. Range is evaluated by orders of magnitude.
+        Searches over range of values from [-10**:const:`MAX_BOUNDS`,
+        10**:const:`MAXBOUNDS`] to support numerical methods that find roots using
+        bracketing algorithms like `scipy.optimize.brentq`. Range is evaluated by orders
+        of magnitude.
 
         Args:
             func (Callable): Function to evaluate.
 
         Returns:
             List[Tuple[float, float]]: Every pair of (x_lwr, x_upr) values for func(x)
-                where func had opposite signs over range of values evaluated.
+            where func had opposite signs over range of values evaluated.
         """
         values = np.array(
             [-(10 ** x) for x in range(MAX_BOUNDS)]

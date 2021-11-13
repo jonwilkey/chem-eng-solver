@@ -70,7 +70,7 @@ def test_stoichiometry_raises_when_no_directional_character_given():
 
 
 def test_stoichiometry_raises_when_input_eq_is_invalid():
-    """Confirm that :cls:`Stoichiometry` raises when input equation is invalid.
+    """Confirm that :class:`Stoichiometry` raises when input equation is invalid.
 
     Not every input_eq value has a valid solution (e.g. user input could be
     wrong). Confirm that when this occurs that appropriate error is raised when
@@ -88,7 +88,7 @@ def test_stoichiometry_raises_when_elements_not_present_on_both_sides_of_eq():
 
 
 def test_stoichiometry():
-    """Confirms that :cls:`Stoichiometry` works as intended for all test cases."""
+    """Confirms that :class:`Stoichiometry` works as intended for all test cases."""
     for case in TEST_CASES:
         st = Stoichiometry(case["input_eq"])
         for name, value in case.items():

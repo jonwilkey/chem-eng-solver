@@ -111,10 +111,10 @@ class Units:
         """Count number of significant figures in input value.
 
         Tracks what the minimum number of sigfigs is of the units that this instance of
-        :cls:`Units` has encountered thus far.
+        :class:`Units` has encountered thus far.
 
         Args:
-            value (str): Input vale.
+            value (str): Input value.
         """
         sigfig_count = len(Patterns.sigfigs.sub(Patterns.sigfigs_repl, value))
         self.sigfigs = min(self.sigfigs, sigfig_count)
@@ -125,17 +125,16 @@ class Units:
         """Parse input value plus string and convert into equivalent SI units.
 
         This function assumes that inputs match the following pattern:
-
-        [0-9]+ [a-z]+([*/])?
+        :regexp:`[0-9]+ [a-z]+([*/])?`
 
         Args:
-            input_str (str): Input value plus units, e.g. "212 degF"
+            input_str (str): Input value plus units, e.g. "212 degF".
             include_units (bool, optional): Whether or not to include units in the
                 return object. Defaults to False.
 
         Returns:
             float: Value converted to SI units, e.g. "212 degF" --> 373.15 (the
-                equivalent value in Kelvin)
+            equivalent value in Kelvin).
         """
         value, units_str = self._initial_parser(input_str)
         units = self._units_parser(units_str)

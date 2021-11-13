@@ -43,7 +43,8 @@ See the ``examples`` directory for worked problems.
 Development
 -----------
 
-To setup this package for development, do the following:
+This project is under development at: https://github.com/jonwilkey/chem-eng-solver.
+To replicate the development environment, do the following:
 
 1. Clone this repo to your local machine ``git clone git@github.com:jonwilkey/chem-eng-solver.git``.
 2. Install poetry (see install instructions `here <https://github.com/python-poetry/poetry>`__.

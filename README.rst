@@ -41,7 +41,7 @@ Not released yet :) however the goal is to publish this package on `PyPI <https:
 Examples
 --------
 
-See the ``examples`` directory for worked problems.
+See the `examples <https://github.com/jonwilkey/chem-eng-solver/tree/main/examples>`__ directory for worked problems.
 
 
 Development

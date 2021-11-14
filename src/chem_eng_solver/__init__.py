@@ -1,4 +1,4 @@
-"""This module provides methods for solving common chemical engineering problems.
+"""chem_eng_solver provides methods for solving common chemical engineering problems.
 
 Specifically:
 

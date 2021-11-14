@@ -1,9 +1,6 @@
 API Reference
 =========================
 
-Module contents
----------------
-
 .. automodule:: chem_eng_solver
    :members:
    :undoc-members:

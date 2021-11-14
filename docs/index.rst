@@ -56,7 +56,7 @@ To replicate the development environment, do the following:
    :includehidden:
    :caption: Contents
 
-   _apidoc/modules
+   _apidoc/chem_eng_solver
 
 
 Indices and tables
